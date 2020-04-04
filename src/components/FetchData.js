@@ -11,6 +11,7 @@ import {
   CartesianGrid
 } from "recharts";
 
+
 export default class FetchData extends React.Component {
   state = {
     chooseState: "Georgia",
@@ -65,6 +66,13 @@ export default class FetchData extends React.Component {
     this.getStates();
   };
 
+numberWithCommas(x) {
+     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+   
+   
+  }
+
+
   async getUSA() {
     var requestOptions = {
       method: "GET",
@@ -74,6 +82,7 @@ export default class FetchData extends React.Component {
     const response = await fetch(
       "https://corona.lmao.ninja/countries/USA",
       requestOptions
+
     );
 
     const data = await response.json();
@@ -117,9 +126,10 @@ export default class FetchData extends React.Component {
       }
     ];
 
-    var worldDeathRatio = this.state.worldData.deaths / this.state.worldData.cases 
-    var usaDeathRatio = this.state.countryData.deaths / this.state.countryData.cases
-   var stateDeathRatio = this.state.stateData.deaths / this.state.stateData.cases 
+    var worldDeathRatio = this.state.worldData.deaths / this.state.worldData.cases *100
+    var usaDeathRatio = this.state.countryData.deaths / this.state.countryData.cases *100
+   var stateDeathRatio = this.state.stateData.deaths / this.state.stateData.cases *100;
+   
 
     
 
