@@ -1,0 +1,109 @@
+
+:root {
+
+    --ff-primary: 'Source Sans Pro', sans-serif;
+    --ff-secondary: 'Source Code Pro' monospace;
+
+    --fw-reg: 300;
+    --fw-bold: 900;
+
+
+    --clr-red: #ff0000;
+    --clr-green: rgb(0, 187, 72);
+    --clr-blue: rgb(13, 49, 209);
+    --clr-teal: rgb(69, 227, 255);
+
+    --fs-h1: 3rem;
+    --fs-h2: 2.5rem;
+    --fs-h3: 1.5rem;
+    --fs-body: 1rem;
+
+
+}
+
+@media (min-width: 1930px) {
+  :root {
+      --fs-h1: 4.5rem;
+      --fs-h2: 3.75rem;
+      --fs-h3: 1.5rem;
+      --fs-body: 1.25rem;
+      }
+}
+
+
+
+.purple {
+
+  color: rgb(122, 120, 241);
+
+}
+
+
+.teal {
+
+  color: var(--clr-teal)
+}
+.red {
+
+    color: var(--clr-red)
+}
+
+.green{
+    color: var(--clr-green)
+}
+.blue {
+
+  color: var(--clr-blue)
+}
+
+
+
+h1,
+h2,
+h3 {
+    padding: .5rem;
+    line-height: 1;
+    margin: 0;
+}
+
+h1 { font-size: var(--fs-h1)}
+h2 { font-size: var(--fs-h2)}
+h3 { font-size: var(--fs-h3)}
+
+
+body {
+    
+    background-color: #000;
+}
+
+.main {
+   
+    
+    width: 65%;
+    background-color:#fff;
+  
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .c1 {
+    width: 33.33%;
+   padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
+ .c2 {
+    padding: 25px; 
+    width: 25%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /*
+  .c3 {
+     
+    width: 33.33%;
+    margin-left: auto;
+    margin-right: auto;
+  } */
