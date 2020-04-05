@@ -13,17 +13,22 @@ import {
 
 
 export default class FetchData extends React.Component {
-  state = {
+
+state = {
     chooseState: "Georgia",
     stateData: [],
     countryData: '',
-    worldData: ''
+    worldData: '',
+   
   };
 
-  componentDidMount() {
+
+componentDidMount () {
     this.getWorldData();
     this.getUSA();
     this.getStates();
+  
+      
   }
 
   async getWorldData() {
@@ -32,13 +37,13 @@ export default class FetchData extends React.Component {
       redirect: "follow"
     };
 
-    const response = await fetch(
-      "https://corona.lmao.ninja/all",
-      requestOptions
-    );
-    const data = await response.json();
-    this.setState({ worldData: data });
-    console.log(data);
+   await fetch("https://corona.lmao.ninja/all", requestOptions)
+   .then(response => response.json())
+   .then(json => this.setState({worldData: json}))  
+
+
+
+
   }
 
   async getStates() {
@@ -56,9 +61,14 @@ export default class FetchData extends React.Component {
 
     this.state.stateData = [];
     for (let i = 0; i < data.length; i++) {
-      if (this.state.chooseState == data[i].state)
+      if (this.state.chooseState == data[i].state) {
         this.setState({ stateData: data[i] });
+
+      }
     }
+
+
+
   }
 
   handleChange = event => {
@@ -66,9 +76,8 @@ export default class FetchData extends React.Component {
     this.getStates();
   };
 
-numberWithCommas(x) {
-     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-   
+async numberWithCommas(x) {
+     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") 
    
   }
 
@@ -79,22 +88,15 @@ numberWithCommas(x) {
       redirect: "follow"
     };
 
-    const response = await fetch(
-      "https://corona.lmao.ninja/countries/USA",
-      requestOptions
-
-    );
-
-    const data = await response.json();
-
-    this.setState({ countryData: data });
-
-    console.log(this.state.countryData);
+    const response = await fetch("https://corona.lmao.ninja/countries/USA",requestOptions)
+    .then(response => response.json())
+    .then(json => this.setState({countryData: json}))
   }
 
+render() {
+    var nf = new Intl.NumberFormat();
 
-
-  render() {
+    var date = (new Date().getMonth() + 1) +  "/" + new Date().getDate() + "/" + new Date().getFullYear(); 
     const usaStateData = [
       {
         "name": this.state.stateData.state,
@@ -132,21 +134,24 @@ numberWithCommas(x) {
    
 
     
-
-
+ 
+   // "1,234,567,890"
+    
     return (
       <div className="main">
         <h1 className="c1">Coronavirus Cases</h1>
-        <div className="c2">
+        <div className="c2"> 
+        <h3 className="c2">{date}</h3>     
 
           {/* WORLD DATA */}
 
           <h2> World Wide </h2>
-          <h3 className="blue">Cases: {this.state.worldData.cases}</h3>
-          <h3 className="purple">Active cases: {this.state.worldData.active}</h3>
-          <h3 className="red">Deaths: {this.state.worldData.deaths} {"(" +  worldDeathRatio.toFixed(2) + "%)"}</h3>
-          <h3 className="green">Recovered: {this.state.worldData.recovered}</h3>
-          <h3 className="teal">Affected Countries: {this.state.worldData.affectedCountries}</h3>
+          
+          <h3 className="blue">Cases: {nf.format(this.state.worldData.cases)}</h3>
+          <h3 className="purple">Active cases: {nf.format(this.state.worldData.active)}</h3>
+          <h3 className="red">Deaths: {nf.format(this.state.worldData.deaths)} {"(" +  worldDeathRatio.toFixed(2) + "%)"}</h3>
+          <h3 className="green">Recovered: {nf.format(this.state.worldData.recovered)}</h3>
+          <h3 className="teal">Affected Countries: {nf.format(this.state.worldData.affectedCountries)}</h3>
           
         </div>
 
@@ -170,9 +175,9 @@ numberWithCommas(x) {
          {/* USA DATA */}
         <div className="c2">
           <h2> United States </h2>
-          <h3 className="blue">Cases: {this.state.countryData.cases}</h3>
+          <h3 className="blue">Cases: {nf.format(this.state.countryData.cases)}</h3>
 
-          <h3 className="red">Deaths: {this.state.countryData.deaths} {"(" + usaDeathRatio.toFixed(2) + "%)"} </h3>
+          <h3 className="red">Deaths: {nf.format(this.state.countryData.deaths)} {"(" + usaDeathRatio.toFixed(2) + "%)"} </h3>
           
     
         </div>
@@ -245,15 +250,15 @@ numberWithCommas(x) {
             <option value="Vermont">Vermont</option>
             <option value="Virginia">Virginia</option>
             <option value="Washington">Washington</option>
-            <option value="West Virgina">West Virginia</option>
+            <option value="West Virginia">West Virginia</option>
             <option value="Wisconsin">Wisconsin</option>
             <option value="Wyoming">Wyoming</option>
           </select>
           <h2> {this.state.stateData.state}</h2>
 
-          <h3 className="blue">Cases: {this.state.stateData.cases}</h3>
+          <h3 className="blue">Cases: {nf.format(this.state.stateData.cases)}</h3>
 
-          <h3 className="red">Deaths: {this.state.stateData.deaths} {"(" + stateDeathRatio.toFixed(2) + "%)"}</h3>
+          <h3 className="red">Deaths: {nf.format(this.state.stateData.deaths)} {"(" + stateDeathRatio.toFixed(2) + "%)"}</h3>
         </div>
 
         <div className="c1">
