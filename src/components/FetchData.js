@@ -8,52 +8,43 @@ import {
   YAxis,
   Tooltip,
   Legend,
-  CartesianGrid
+  CartesianGrid,
+ 
 } from "recharts";
 
-
 export default class FetchData extends React.Component {
-
-state = {
+  state = {
     chooseState: "Georgia",
     stateData: [],
-    countryData: '',
-    worldData: '',
-   
+    countryData: "",
+    worldData: "",
   };
 
-
-componentDidMount () {
+  componentDidMount() {
     this.getWorldData();
     this.getUSA();
     this.getStates();
-  
-      
   }
 
   async getWorldData() {
     var requestOptions = {
       method: "GET",
-      redirect: "follow"
+      redirect: "follow",
     };
 
-   await fetch("https://corona.lmao.ninja/all", requestOptions)
-   .then(response => response.json())
-   .then(json => this.setState({worldData: json}))  
-
-
-
-
+    await fetch("https://corona.lmao.ninja/v2/all", requestOptions)
+      .then((response) => response.json())
+      .then((json) => this.setState({ worldData: json }));
   }
 
   async getStates() {
     var requestOptions = {
       method: "GET",
-      redirect: "follow"
+      redirect: "follow",
     };
 
     const response = await fetch(
-      "https://corona.lmao.ninja/states",
+      "https://corona.lmao.ninja/v2/states",
       requestOptions
     );
 
@@ -63,48 +54,51 @@ componentDidMount () {
     for (let i = 0; i < data.length; i++) {
       if (this.state.chooseState == data[i].state) {
         this.setState({ stateData: data[i] });
-
       }
     }
-
-
-
   }
 
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({ chooseState: event.target.value });
     this.getStates();
   };
 
-async numberWithCommas(x) {
-     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") 
-   
+  async numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
-
 
   async getUSA() {
     var requestOptions = {
       method: "GET",
-      redirect: "follow"
+      redirect: "follow",
     };
 
-    const response = await fetch("https://corona.lmao.ninja/countries/USA",requestOptions)
-    .then(response => response.json())
-    .then(json => this.setState({countryData: json}))
+    const response = await fetch(
+      "https://corona.lmao.ninja/v2/countries/USA",
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((json) => this.setState({ countryData: json }));
   }
 
-render() {
+  render() {
     var nf = new Intl.NumberFormat();
 
-    var date = (new Date().getMonth() + 1) +  "/" + new Date().getDate() + "/" + new Date().getFullYear(); 
+    var date =
+      new Date().getMonth() +
+      1 +
+      "/" +
+      new Date().getDate() +
+      "/" +
+      new Date().getFullYear();
     const usaStateData = [
       {
-        "name": this.state.stateData.state,
-        "Cases": this.state.stateData.cases,
-        "Deaths": this.state.stateData.deaths,
+        name: this.state.stateData.state,
+        Cases: this.state.stateData.cases,
+        Deaths: this.state.stateData.deaths,
         "Deaths Today": this.state.stateData.todayDeaths,
-        "Cases Today": this.state.stateData.todayCases
-      }
+        "Cases Today": this.state.stateData.todayCases,
+      },
     ];
 
     const usaData = [
@@ -113,8 +107,8 @@ render() {
         Cases: this.state.countryData.cases,
         Deaths: this.state.countryData.deaths,
         "Deaths Today": this.state.countryData.todayDeaths,
-        "Cases Today": this.state.countryData.todayCases
-      }
+        "Cases Today": this.state.countryData.todayCases,
+      },
     ];
 
     const world_data = [
@@ -124,38 +118,49 @@ render() {
         Deaths: this.state.worldData.deaths,
         Recovered: this.state.worldData.recovered,
         "Affected Countries": this.state.worldData.affectedCountries,
-        "Active Cases": this.state.worldData.active
-      }
+        "Active Cases": this.state.worldData.active,
+      },
     ];
 
-    var worldDeathRatio = this.state.worldData.deaths / this.state.worldData.cases *100
-    var usaDeathRatio = this.state.countryData.deaths / this.state.countryData.cases *100
-   var stateDeathRatio = this.state.stateData.deaths / this.state.stateData.cases *100;
-   
+    var worldDeathRatio =
+      (this.state.worldData.deaths / this.state.worldData.cases) * 100;
+    var usaDeathRatio =
+      (this.state.countryData.deaths / this.state.countryData.cases) * 100;
+    var stateDeathRatio =
+      (this.state.stateData.deaths / this.state.stateData.cases) * 100;
 
-    
- 
-   // "1,234,567,890"
-    
+  
     return (
       <div className="main">
         <h1 className="c1">Coronavirus Cases</h1>
-        <div className="c2"> 
-        <h3 className="c2">{date}</h3>     
+        <div className="c2">
+          <h3 className="c2">{date}</h3>
 
           {/* WORLD DATA */}
 
           <h2> World Wide </h2>
-          
-          <h3 className="blue">Cases: {nf.format(this.state.worldData.cases)}</h3>
-          <h3 className="purple">Active cases: {nf.format(this.state.worldData.active)}</h3>
-          <h3 className="red">Deaths: {nf.format(this.state.worldData.deaths)} {"(" +  worldDeathRatio.toFixed(2) + "%)"}</h3>
-          <h3 className="green">Recovered: {nf.format(this.state.worldData.recovered)}</h3>
-          <h3 className="teal">Affected Countries: {nf.format(this.state.worldData.affectedCountries)}</h3>
-          
+
+          <h3 className="blue">
+            Cases: {nf.format(this.state.worldData.cases)}
+          </h3>
+          <h3 className="purple">
+            Active cases: {nf.format(this.state.worldData.active)}
+          </h3>
+          <h3 className="red">
+            Deaths: {nf.format(this.state.worldData.deaths)}{" "}
+            {"(" + worldDeathRatio.toFixed(2) + "%)"}
+          </h3>
+          <h3 className="green">
+            Recovered: {nf.format(this.state.worldData.recovered)}
+          </h3>
+          <h3 className="teal">
+            Affected Countries:{" "}
+            {nf.format(this.state.worldData.affectedCountries)}
+          </h3>
         </div>
 
-        <div className="c1">
+        <div className="chart-container">
+    
           <BarChart width={500} height={250} data={world_data} barSize={35}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
@@ -168,18 +173,21 @@ render() {
             <Bar dataKey="Deaths" fill="#FF0000" />
             <Bar dataKey="Recovered" fill="rgb(0, 187, 72)" />
             <Bar dataKey="Affected Countries" fill="rgb(69, 227, 255)" />
-            
           </BarChart>
+         
         </div>
 
-         {/* USA DATA */}
+        {/* USA DATA */}
         <div className="c2">
           <h2> United States </h2>
-          <h3 className="blue">Cases: {nf.format(this.state.countryData.cases)}</h3>
+          <h3 className="blue">
+            Cases: {nf.format(this.state.countryData.cases)}
+          </h3>
 
-          <h3 className="red">Deaths: {nf.format(this.state.countryData.deaths)} {"(" + usaDeathRatio.toFixed(2) + "%)"} </h3>
-          
-    
+          <h3 className="red">
+            Deaths: {nf.format(this.state.countryData.deaths)}{" "}
+            {"(" + usaDeathRatio.toFixed(2) + "%)"}{" "}
+          </h3>
         </div>
 
         <div className="c1">
@@ -197,7 +205,7 @@ render() {
           </BarChart>
         </div>
 
-       {/* STATE DATA */}
+        {/* STATE DATA */}
         <div className="c2">
           <h3>Choose State</h3>
           <select value={this.state.chooseState} onChange={this.handleChange}>
@@ -256,9 +264,14 @@ render() {
           </select>
           <h2> {this.state.stateData.state}</h2>
 
-          <h3 className="blue">Cases: {nf.format(this.state.stateData.cases)}</h3>
+          <h3 className="blue">
+            Cases: {nf.format(this.state.stateData.cases)}
+          </h3>
 
-          <h3 className="red">Deaths: {nf.format(this.state.stateData.deaths)} {"(" + stateDeathRatio.toFixed(2) + "%)"}</h3>
+          <h3 className="red">
+            Deaths: {nf.format(this.state.stateData.deaths)}{" "}
+            {"(" + stateDeathRatio.toFixed(2) + "%)"}
+          </h3>
         </div>
 
         <div className="c1">
